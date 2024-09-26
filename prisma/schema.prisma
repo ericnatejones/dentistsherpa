@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Dentist {
+  id          String   @id @default(cuid())
+  name        String
+  address     String
+  city        String
+  state       String
+  zipCode     String
+  lat         Float
+  lng         Float
+  rating      Float?
+  specialties String[]
+  website     String?
+  claimedBy   User?    @relation(fields: [claimedById], references: [id])
+  claimedById String?
+}
+
+model User {
+  id       String    @id @default(cuid())
+  email    String    @unique
+  name     String?
+  dentists Dentist[]
+}
+
+model Specialty {
+  id   String @id @default(cuid())
+  name String @unique
+}
